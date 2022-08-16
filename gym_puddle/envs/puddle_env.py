@@ -28,11 +28,11 @@ class PuddleEnv(gym.Env):
         self._seed()
         self.viewer = None
 
-    def _seed(self, seed=None):
+    def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def _step(self, action):
+    def step(self, action):
         assert self.action_space.contains(action), "%r (%s) invalid"%(action, type(action))
 
         self.pos += self.actions[action] + self.np_random.uniform(low=-self.noise, high=self.noise, size=(2,))
@@ -44,7 +44,7 @@ class PuddleEnv(gym.Env):
 
         return self.pos, reward, done, {}
 
-    def _get_reward(self, pos):
+    def get_reward(self, pos):
         reward = -1.
         for cen, wid in zip(self.puddle_center, self.puddle_width):
             reward -= 2. * self._gaussian1d(pos[0], cen[0], wid[0]) * \
@@ -52,17 +52,17 @@ class PuddleEnv(gym.Env):
 
         return reward
 
-    def _gaussian1d(self, p, mu, sig):
+    def gaussian1d(self, p, mu, sig):
         return np.exp(-((p - mu)**2)/(2.*sig**2)) / (sig*np.sqrt(2.*np.pi))
 
-    def _reset(self):
+    def reset(self):
         if self.start is None:
             self.pos = self.observation_space.sample()
         else:
             self.pos = copy.copy(self.start)
         return self.pos
 
-    def _render(self, mode='human', close=False):
+    def render(self, mode='human', close=False):
         if close:
             if self.viewer is not None:
                 self.viewer.close()
