@@ -25,7 +25,7 @@ class PuddleEnv(gym.Env):
         for i in range(4):
             self.actions[i][i//2] = thrust * (i%2 * 2 - 1)
 
-        self._seed()
+        self.seed()
         self.viewer = None
 
     def seed(self, seed=None):
@@ -52,7 +52,7 @@ class PuddleEnv(gym.Env):
 
         return reward
 
-    def gaussian1d(self, p, mu, sig):
+    def _gaussian1d(self, p, mu, sig):
         return np.exp(-((p - mu)**2)/(2.*sig**2)) / (sig*np.sqrt(2.*np.pi))
 
     def reset(self):
