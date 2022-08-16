@@ -44,7 +44,7 @@ class PuddleEnv(gym.Env):
 
         return self.pos, reward, done, {}
 
-    def get_reward(self, pos):
+    def _get_reward(self, pos):
         reward = -1.
         for cen, wid in zip(self.puddle_center, self.puddle_width):
             reward -= 2. * self._gaussian1d(pos[0], cen[0], wid[0]) * \
